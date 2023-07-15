@@ -1,0 +1,41 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+  <form-input
+    label="Name"
+    placeholder="Enter your name"
+    [control]="form.controls.name"
+    errorMessage="Invalid name"
+  ></form-input>
+  <form-input
+    label="Username"
+    placeholder="Enter your username"
+    [control]="form.controls.username"
+    errorMessage="Invalid email"
+  ></form-input>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Country</mat-label>
+    <mat-select [formControl]="form.controls.country">
+      <mat-option *ngFor="let country of countries" [value]="country">
+        {{ country }}
+      </mat-option>
+    </mat-select>
+    <mat-error
+      *ngIf="form.controls.country.invalid && form.controls.country.touched"
+    >
+      Country is required
+    </mat-error>
+  </mat-form-field>
+
+  <form-input
+    label="Post Code"
+    placeholder="Enter your postcode"
+    [control]="form.controls.postCode"
+    errorMessage="Invalid postcode"
+  ></form-input>
+
+  <movie-autocomplete-form-field
+    [movieControl]="form.controls.favouriteMovie"
+  ></movie-autocomplete-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Submit</button>
+</form>

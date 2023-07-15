@@ -1,0 +1,17 @@
+<mat-form-field>
+  <mat-label>Favourite movie</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="movieControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-option
+      *ngFor="let movie of filteredMovies | async"
+      [value]="movie.Title"
+    >
+      {{ movie.Title }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
