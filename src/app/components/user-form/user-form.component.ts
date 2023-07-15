@@ -1,20 +1,22 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { Router } from '@angular/router';
-import { tap } from 'rxjs';
-import { Country } from 'src/app/models/user';
-import { UserFormService } from 'src/app/services/user-form.service';
-import { FormInputComponent } from '../form-input/form-input.component';
-import { MovieAutocompleteFormFieldComponent } from '../movie-autocomplete-form-field/movie-autocomplete-form-field.component';
+import { CommonModule } from "@angular/common";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ReactiveFormsModule, Validators } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { Router } from "@angular/router";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { tap } from "rxjs";
+import { Country } from "src/app/models/user";
+import { UserFormService } from "src/app/services/user-form.service";
+import { FormInputComponent } from "../form-input/form-input.component";
+import { MovieAutocompleteFormFieldComponent } from "../movie-autocomplete-form-field/movie-autocomplete-form-field.component";
 
+@UntilDestroy()
 @Component({
-  selector: 'user-form',
-  templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss'],
+  selector: "user-form",
+  templateUrl: "./user-form.component.html",
+  styleUrls: ["./user-form.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -38,10 +40,10 @@ export class UserFormComponent {
 
   ngOnInit() {
     this.form
-      .get('country')
+      .get("country")
       ?.valueChanges.pipe(
         tap((country) => {
-          const postCodeControl = this.form.get('postCode');
+          const postCodeControl = this.form.get("postCode");
           if (country === Country.UnitedKingdom) {
             postCodeControl?.setValidators([
               Validators.required,
@@ -56,7 +58,8 @@ export class UserFormComponent {
             ]);
           }
           postCodeControl?.updateValueAndValidity();
-        })
+        }),
+        untilDestroyed(this)
       )
       .subscribe();
   }
@@ -64,7 +67,7 @@ export class UserFormComponent {
   onSubmit(): void {
     if (this.form.valid) {
       this.router.navigate([
-        '/thank-you',
+        "/thank-you",
         { data: JSON.stringify(this.form.value) },
       ]);
     } else {
